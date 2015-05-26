@@ -560,3 +560,11 @@ def update_candidate(cand_id):
         'update_contribution.html',
         candidate=candidate,
         form=form)
+
+
+@APP.route('/multimonitor/<election_folder>/<candidate_file>')
+def multimonitor_download(election_folder, candidate_file):
+    return flask.render_template(
+        'multimonitor.html',
+        election_folder=election_folder,
+        candidate_file=candidate_file)
