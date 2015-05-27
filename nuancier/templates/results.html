@@ -74,6 +74,12 @@ from {{ election.election_year }}.
                                 )
                       }}" alt="img {{ candidate.candidate_file }}"/>
             </a>
+            <a href="url_for('multimonitor',
+                                election_folder=election.election_folder,
+                                candidate_file=candidate.candidate_file
+                                )">
+                Multi-monitor Download
+            </a>
         </td>
         <td>
             Author: {{ candidate.candidate_author }} <br />
