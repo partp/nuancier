@@ -1,0 +1,20 @@
+#croppingWidget {
+    position: relative;
+}
+
+#croppingWidget img {
+    padding: 5px;
+}
+
+.divContainers {
+    position: absolute;
+    outline: 2px dashed rgba(222,60,80,.9);
+    cursor:move;
+    float:left;
+    z-index: 100;
+}
+
+ #cropImage {
+    width: 720px;
+    height: 480px;
+ }
