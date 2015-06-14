@@ -1,20 +1,15 @@
-#croppingWidget {
-    position: relative;
-}
-
-#croppingWidget img {
-    padding: 5px;
-}
-
-.divContainers {
+.overlays {
     position: absolute;
+    padding: 10px 5px 10px 5px;
     outline: 2px dashed rgba(222,60,80,.9);
-    cursor:move;
-    float:left;
+    cursor: move;
     z-index: 100;
 }
 
- #cropImage {
+#cropImage {
+    position: relative;
+    float: left;
+    padding: 10px 5px 10px 5px;
     width: 720px;
     height: 480px;
- }
+}

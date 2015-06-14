@@ -1,5 +1,4 @@
 var element_pos = 0;
-var overlayCount = 0;
 var overlays = [];
 $(document).ready(function() {
     $('#addOverlay').click(function() {
@@ -9,10 +8,9 @@ $(document).ready(function() {
             var dynamic_div = $(document.createElement('div')).css({
                 width: xAspect, height: yAspect
             });
-            $(dynamic_div).addClass('divContainers').draggable().resizable();
-            $(dynamic_div).appendTo('body');
+            $(dynamic_div).addClass('overlays').draggable().resizable();
+            $(dynamic_div).appendTo('#cropArea');
             overlays.push($(dynamic_div));
-            overlayCount += 1;
         }
     });
 });
