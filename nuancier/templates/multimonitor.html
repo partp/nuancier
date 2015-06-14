@@ -19,13 +19,15 @@ href="{{ url_for('static', filename='multimonitor.css') }}" />
         value="Add Screen" />
         <input type="button" id="jsCrop" value="Crop & Download" />
     </div>
-    <img id="cropImage" src="{{ url_for('base_picture',
-                                        filename='%s/%s' % (
-                                            election_folder,
-                                            candidate_file
+    <div id="cropArea">
+        <img id="cropImage" src="{{ url_for('base_picture',
+                                            filename='%s/%s' % (
+                                                election_folder,
+                                                candidate_file
+                                                )
                                             )
-                                        )
-}}" alt="img {{ candidate_file }}" />
+                                            }}" alt="img {{ candidate_file }}" />
+    </div>
 </div>
 {% endblock %}
 
