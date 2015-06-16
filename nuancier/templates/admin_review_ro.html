@@ -81,7 +81,8 @@ candidates or not.
                                 )
                       }}" alt="img {{ candidate.candidate_file }}"/>
             </a>
-            <a href="{{ url_for('multimonitor_download',
+            <br />
+            <a class="large_button" href="{{ url_for('multimonitor_download',
                                 election_folder=election.election_folder,
                                 candidate_file=candidate.candidate_file
                                 )
