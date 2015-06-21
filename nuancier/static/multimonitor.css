@@ -1,7 +1,7 @@
 .overlays {
     position: absolute;
     padding: 10px 5px 10px 5px;
-    outline: 2px dashed rgba(222,60,80,.9);
+    outline: 2px dashed #193b6c;
     cursor: move;
     z-index: 100;
 }
@@ -12,4 +12,16 @@
     padding: 10px 5px 10px 5px;
     width: 720px;
     height: 480px;
+}
+
+#cropTip {
+    position: relative;
+    float: left;
+}
+
+#cropTip span {
+    border: 2px solid #193b6c;
+    color: #193b6c;
+    display: inline-block;
+    padding: 0 5px;
 }
