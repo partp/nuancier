@@ -1,11 +1,12 @@
 var $cropImage = $('#cropImage'),
-    overlays = [],
+    $overlays = [],
     patt = /-(\d+)x(\d+).\w{3,4}/g,
     res = patt.exec($('#cropImage').attr('src')),
     wallpaperWidth = res[1],
     wallpaperHeight = res[2],
     cropImageWidth = $cropImage.width(),
-    cropImageHeight = $cropImage.height();
+    cropImageHeight = $cropImage.height(),
+    imageScale = cropImageWidth / wallpaperWidth;
 
 $(document).ready(function() {
     $('#addOverlay').click(function() {
@@ -13,31 +14,45 @@ $(document).ready(function() {
         var yAspect = $('#yAspect').val();
         if(Number(xAspect) > 0 && Number(yAspect) > 0) {
             var dynamic_div = $(document.createElement('div')).css({
-                width: xAspect, height: yAspect
+                width: xAspect * imageScale,
+                height: yAspect * imageScale
             });
             $(dynamic_div).addClass('overlays').draggable().resizable();
             $(dynamic_div).appendTo('#cropArea');
-            overlays.push($(dynamic_div));
+            $overlays.push($(dynamic_div));
         }
     });
     $('#enlargeOverlay').click(function() {
-        if(overlays.length > 0){
-            for(var i = 0; i < overlays.length; i++) {
-                overlays[i].css({
-                        'width' : overlays[i].width()  * 1.1,
-                        'height': overlays[i].height() * 1.1
-                });
-            }
+        for(var i = 0; i < $overlays.length; i++) {
+            $overlays[i].css({
+                    'width' : $overlays[i].width()  * 1.1,
+                    'height': $overlays[i].height() * 1.1
+            });
         }
     });
     $('#shrinkOverlay').click(function() {
-        if(overlays.length > 0){
-            for(var i = 0; i < overlays.length; i++) {
-                overlays[i].css({
-                        'width' : overlays[i].width()  / 1.1,
-                        'height': overlays[i].height() / 1.1
-                });
-            }
+        for(var i = 0; i < $overlays.length; i++) {
+            $overlays[i].css({
+                    'width' : $overlays[i].width()  / 1.1,
+                    'height': $overlays[i].height() / 1.1
+            });
+        }
+    });
+    $('#downloadCrop').click(function() {
+        for(var i = 0; i < $overlays.length; i++) {
+            var cropCanvas,
+                wallpaperImage = $("<img/>").attr("src", $cropImage.attr("src")).get(0),
+                left = ($overlays[i].offset().left - $cropImage.offset().left) / imageScale,
+                top =  ($overlays[i].offset().top - $cropImage.offset().top) / imageScale,
+                width = $overlays[i].width() / imageScale,
+                height = $overlays[i].height() / imageScale;
+
+            cropCanvas = document.createElement('canvas');
+            cropCanvas.width = width;
+            cropCanvas.height = height;
+
+            cropCanvas.getContext('2d').drawImage(wallpaperImage, left, top, width, height, 0, 0, width, height);
+            window.open(cropCanvas.toDataURL("image/png"));
         }
     });
 });
