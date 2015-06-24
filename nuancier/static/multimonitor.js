@@ -1,11 +1,12 @@
-var $cropImage = $('#cropImage'),
-    $overlays = [],
-    patt = /-(\d+)x(\d+).\w{3,4}/g,
+var $overlays = [],
+    $cropImage = $('#cropImage'),
+    cropImageWidth = $cropImage.width(),
+    cropImageHeight = $cropImage.height(),
+    patt = /-(\d+)x(\d+).(\w{3,4})/g,
     res = patt.exec($('#cropImage').attr('src')),
     wallpaperWidth = res[1],
     wallpaperHeight = res[2],
-    cropImageWidth = $cropImage.width(),
-    cropImageHeight = $cropImage.height(),
+    wallpaperFormat = res[3],
     imageScale = cropImageWidth / wallpaperWidth;
 
 $(document).ready(function() {
@@ -52,7 +53,7 @@ $(document).ready(function() {
             cropCanvas.height = height;
 
             cropCanvas.getContext('2d').drawImage(wallpaperImage, left, top, width, height, 0, 0, width, height);
-            window.open(cropCanvas.toDataURL("image/png"));
+            window.open(cropCanvas.toDataURL('image/'+ wallpaperFormat));
         }
     });
 });
