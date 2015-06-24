@@ -1,7 +1,15 @@
+#cropControls {
+    padding: 0px 10px 10px 10px;
+}
+
+#downloadCrop {
+    position: relative;
+    float: right;
+}
+
 .overlays {
     position: absolute;
-    padding: 10px 5px 10px 5px;
-    outline: 2px dashed #193b6c;
+    outline: 2px dashed #0066CC;
     cursor: move;
     z-index: 100;
 }
@@ -9,7 +17,6 @@
 #cropImage {
     position: relative;
     float: left;
-    padding: 10px 5px 10px 5px;
     width: 720px;
     height: 480px;
 }
@@ -17,10 +24,11 @@
 #cropTip {
     position: relative;
     float: left;
+    padding: 10px;
 }
 
 #cropTip span {
-    border: 2px solid #193b6c;
+    border: 2px solid #0066CC;
     color: #193b6c;
     display: inline-block;
     padding: 0 5px;
