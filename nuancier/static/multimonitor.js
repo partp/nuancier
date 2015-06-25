@@ -40,15 +40,14 @@ $(document).ready(function() {
         }
     });
     $('#downloadCrop').click(function() {
+        var cropCanvas = document.createElement('canvas'),
+            wallpaperImage = $("<img/>").attr("src", $cropImage.attr("src")).get(0);
         for(var i = 0; i < $overlays.length; i++) {
-            var cropCanvas,
-                wallpaperImage = $("<img/>").attr("src", $cropImage.attr("src")).get(0),
-                left = ($overlays[i].offset().left - $cropImage.offset().left) / imageScale,
+            var left = ($overlays[i].offset().left - $cropImage.offset().left) / imageScale,
                 top =  ($overlays[i].offset().top - $cropImage.offset().top) / imageScale,
                 width = $overlays[i].width() / imageScale,
                 height = $overlays[i].height() / imageScale;
 
-            cropCanvas = document.createElement('canvas');
             cropCanvas.width = width;
             cropCanvas.height = height;
 
