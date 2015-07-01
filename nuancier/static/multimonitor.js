@@ -20,6 +20,8 @@ $(document).ready(function() {
             });
             $(dynamic_div).addClass('overlays').draggable().resizable();
             $(dynamic_div).appendTo('#cropArea');
+            $(dynamic_div)
+            .append('<span class="delete"></span>');
             $overlays.push($(dynamic_div));
         }
     });
@@ -38,6 +40,13 @@ $(document).ready(function() {
                     'height': $overlays[i].height() / 1.1
             });
         }
+    });
+    $('#cropArea').on('click','.delete',function () {
+        $(this).parent().remove();
+        $toDelete = $(this).parent();
+        $overlays.splice($overlays.indexOf($toDelete), 1);
+        $toDelete.remove();
+        return false;
     });
     $('#downloadCrop').click(function() {
         var cropCanvas = document.createElement('canvas'),
