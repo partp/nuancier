@@ -2,14 +2,16 @@ var $overlays = [],
     $cropImage = $('#cropImage'),
     cropImageWidth = $cropImage.width(),
     cropImageHeight = $cropImage.height(),
-    patt = /-(\d+)x(\d+).(\w{3,4})/g,
-    res = patt.exec($('#cropImage').attr('src')),
-    wallpaperWidth = res[1],
-    wallpaperHeight = res[2],
-    wallpaperFormat = res[3],
-    imageScale = cropImageWidth / wallpaperWidth;
+    wallpaperWidth,
+    wallpaperHeight,
+    imageScale;
 
 $(document).ready(function() {
+    $("<img/>").attr("src", $cropImage.attr("src")).load(function() {
+        wallpaperWidth = this.width;
+        wallpaperHeight = this.height;
+        imageScale = cropImageWidth / wallpaperWidth;
+    });
     $('#addOverlay').click(function() {
         var xAspect = $('#xAspect').val();
         var yAspect = $('#yAspect').val();
@@ -61,7 +63,7 @@ $(document).ready(function() {
             cropCanvas.height = height;
 
             cropCanvas.getContext('2d').drawImage(wallpaperImage, left, top, width, height, 0, 0, width, height);
-            window.open(cropCanvas.toDataURL('image/'+ wallpaperFormat));
+            window.open(cropCanvas.toDataURL('image/jpeg'));
         }
     });
 });
