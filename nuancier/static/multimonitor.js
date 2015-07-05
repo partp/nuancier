@@ -23,7 +23,11 @@ $(document).ready(function() {
             $(dynamic_div).addClass('overlays').draggable().resizable();
             $(dynamic_div).appendTo('#cropArea');
             $(dynamic_div)
-            .append('<span class="delete"></span>');
+            .append('<span class="resize-handle resize-handle-nw"></span>')
+            .append('<span class="resize-handle resize-handle-ne"></span>')
+            .append('<span class="delete"></span>')
+            .append('<span class="resize-handle resize-handle-se"></span>')
+            .append('<span class="resize-handle resize-handle-sw"></span>');
             $overlays.push($(dynamic_div));
         }
     });
