@@ -10,7 +10,7 @@ $(document).ready(function() {
     $("<img/>").attr("src", $cropImage.attr("src")).load(function() {
         wallpaperWidth = this.width;
         wallpaperHeight = this.height;
-        imageScale = cropImageWidth / wallpaperWidth;
+        imageScale = cropImageWidth * 1.0 / wallpaperWidth;
     });
     $('#addOverlay').click(function() {
         var xAspect = $('#xAspect').val();
@@ -58,10 +58,10 @@ $(document).ready(function() {
         var cropCanvas = document.createElement('canvas'),
             wallpaperImage = $("<img/>").attr("src", $cropImage.attr("src")).get(0);
         for(var i = 0; i < $overlays.length; i++) {
-            var left = ($overlays[i].offset().left - $cropImage.offset().left) / imageScale,
-                top =  ($overlays[i].offset().top - $cropImage.offset().top) / imageScale,
-                width = $overlays[i].width() / imageScale,
-                height = $overlays[i].height() / imageScale;
+            var left = ($overlays[i].offset().left - $cropImage.offset().left) * 1.0 / imageScale,
+                top =  ($overlays[i].offset().top - $cropImage.offset().top) * 1.0 / imageScale,
+                width = $overlays[i].width() * 1.0 / imageScale,
+                height = $overlays[i].height() * 1.0 / imageScale;
 
             cropCanvas.width = width;
             cropCanvas.height = height;
