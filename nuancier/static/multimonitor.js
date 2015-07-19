@@ -1,4 +1,5 @@
-var $overlays = [],
+var overlays = [],
+    nOverlay = 0,
     $cropImage = $('#cropImage'),
     cropImageWidth = $cropImage.width(),
     cropImageHeight = $cropImage.height(),
@@ -20,38 +21,41 @@ $(document).ready(function() {
                 width: xAspect * imageScale,
                 height: yAspect * imageScale
             });
-            $(dynamic_div).addClass('overlays').draggable().resizable();
-            $(dynamic_div).appendTo('#cropArea');
+            $(dynamic_div).addClass('overlays').attr('id', 'overlay' + nOverlay);
+            $(dynamic_div).draggable().resizable();
             $(dynamic_div)
             .append('<span class="resize-handle resize-handle-nw"></span>')
             .append('<span class="resize-handle resize-handle-ne"></span>')
             .append('<span class="delete"></span>')
             .append('<span class="resize-handle resize-handle-se"></span>')
             .append('<span class="resize-handle resize-handle-sw"></span>');
-            $overlays.push($(dynamic_div));
+            $(dynamic_div).appendTo('#cropArea');
+            overlays.push("#overlay" + nOverlay++);
         }
     });
     $('#enlargeOverlay').click(function() {
-        for(var i = 0; i < $overlays.length; i++) {
-            $overlays[i].css({
-                    'width' : $overlays[i].width()  * 1.1,
-                    'height': $overlays[i].height() * 1.1
+        for(var i = 0; i < overlays.length; i++) {
+            $overlay = $(overlays[i]);
+            $overlay.css({
+                    'width' : $overlay.width()  * 1.1,
+                    'height': $overlay.height() * 1.1
             });
         }
     });
     $('#shrinkOverlay').click(function() {
-        for(var i = 0; i < $overlays.length; i++) {
-            $overlays[i].css({
-                    'width' : $overlays[i].width()  / 1.1,
-                    'height': $overlays[i].height() / 1.1
+        for(var i = 0; i < overlays.length; i++) {
+            $overlay = $(overlays[i]);
+            $overlay.css({
+                    'width' : $overlay.width()  / 1.1,
+                    'height': $overlay.height() / 1.1
             });
         }
     });
     $('#cropArea').on('click','.delete',function () {
-        $(this).parent().remove();
-        $toDelete = $(this).parent();
-        $overlays.splice($overlays.indexOf($toDelete), 1);
-        $toDelete.remove();
+        toDelete = '#' + $(this).parent().attr('id');
+        index = overlays.indexOf(toDelete);
+        $(toDelete).remove();
+        overlays.splice(index, 1);
         return false;
     });
     $('#downloadCrop').click(function() {
