@@ -59,19 +59,20 @@ $(document).ready(function() {
         return false;
     });
     $('#downloadCrop').click(function() {
-        var cropCanvas = document.createElement('canvas'),
-            wallpaperImage = $("<img/>").attr("src", $cropImage.attr("src")).get(0);
+        var data = {overlays: []};
         for(var i = 0; i < $overlays.length; i++) {
             var left = ($overlays[i].offset().left - $cropImage.offset().left) * 1.0 / imageScale,
                 top =  ($overlays[i].offset().top - $cropImage.offset().top) * 1.0 / imageScale,
                 width = $overlays[i].width() * 1.0 / imageScale,
                 height = $overlays[i].height() * 1.0 / imageScale;
 
-            cropCanvas.width = width;
-            cropCanvas.height = height;
-
-            cropCanvas.getContext('2d').drawImage(wallpaperImage, left, top, width, height, 0, 0, width, height);
-            window.open(cropCanvas.toDataURL('image/jpeg'));
+            data.overlays.push([left, top, left + width, top + height]);
         }
+        $.ajax({
+            url: window.location.href,
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8"
+        });
     });
 });
