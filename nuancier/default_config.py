@@ -57,6 +57,9 @@ PICTURE_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'pictures')
 # Cache folder
 CACHE_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'cache')
 
+# Temp folder
+TEMP_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'temp')
+
 # Size of the thumbnails (keeping the ratio)
 THUMB_SIZE = (256, 256)
 
