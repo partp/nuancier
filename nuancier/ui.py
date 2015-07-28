@@ -26,6 +26,7 @@ User interface for the nuancier flask application.
 import hashlib
 import os
 import random
+import tarfile
 
 import flask
 
@@ -33,6 +34,12 @@ from sqlalchemy.exc import SQLAlchemyError
 ## pylint cannot import flask dependency correctly
 # pylint: disable=E0611
 from werkzeug import secure_filename
+
+try:
+    from PIL import Image
+except ImportError:  # pragma: no cover
+    # This is for the old versions not using pillow
+    import Image
 
 import nuancier
 import nuancier.lib as nuancierlib
@@ -562,8 +569,26 @@ def update_candidate(cand_id):
         form=form)
 
 
-@APP.route('/multimonitor/<election_folder>/<candidate_file>')
+@APP.route('/multimonitor/<election_folder>/<candidate_file>',
+           methods=['GET', 'POST'])
 def multimonitor_download(election_folder, candidate_file):
+    if flask.request.method == 'POST':
+        overlays = flask.request.json['overlays']
+        wallpaper = Image.open(os.path.join(APP.config['PICTURE_FOLDER'],
+                               election_folder, candidate_file))
+        tarfilename = election_folder + "_mutimonitor_download.tar.gz"
+        tarfilepath = os.path.join(APP.config['TEMP_FOLDER'], tarfilename)
+        with tarfile.open(tarfilepath, "w:gz") as download:
+            i = 1
+            for dimensions in overlays:
+                filename = "overlay%02d.jpg" % i
+                filepath = os.path.join(APP.config['TEMP_FOLDER'], filename)
+                wallpaper.crop([int(d) for d in dimensions]).save(filepath)
+                download.add(filepath, arcname=os.path.basename(filepath))
+                os.remove(filepath)
+                i += 1
+        return flask.send_from_directory(APP.config['TEMP_FOLDER'],
+                                         tarfilename, as_attachment=True)
     return flask.render_template(
         'multimonitor.html',
         election_folder=election_folder,
