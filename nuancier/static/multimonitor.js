@@ -21,7 +21,17 @@ $(document).ready(function() {
                 width: xAspect,
                 height: yAspect
             });
-            $(dynamic_div).addClass('overlays').draggable().resizable();
+            $(dynamic_div).addClass('overlays').draggable({
+                containment: '#cropImage',
+                snap: true,
+                snapMode: "outer"
+            })
+            .resizable({
+                containment: '#cropImage',
+                minWidth: xAspect,
+                minHeight: yAspect,
+                aspectRatio: xAspect / yAspect
+            });
             $(dynamic_div)
             .append('<span class="resize-handle resize-handle-nw"></span>')
             .append('<span class="resize-handle resize-handle-ne"></span>')

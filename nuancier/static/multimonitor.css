@@ -76,16 +76,3 @@
     right: -5px;
     cursor: se-resize;
 }
-
-#cropTip {
-    position: relative;
-    float: left;
-    padding: 10px;
-}
-
-#cropTip span {
-    border: 2px solid #0066CC;
-    color: #193b6c;
-    display: inline-block;
-    padding: 0 5px;
-}
