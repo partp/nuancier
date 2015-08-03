@@ -588,12 +588,14 @@ def multimonitor_download(election_folder, candidate_file):
         overlays = flask.request.json['overlays']
         wallpaper = Image.open(os.path.join(APP.config['PICTURE_FOLDER'],
                                election_folder, candidate_file))
-        tarfilename = election_folder + "_mutimonitor_download.tar.gz"
+        tarfilename = secure_filename(election_folder +
+                                      "_mutimonitor_download.tar.gz")
         tarfilepath = os.path.join(tempfile.gettempdir(), tarfilename)
         with tarfile.open(tarfilepath, 'w:gz') as download:
             i = 1
             for dimensions in overlays:
-                filename = "Monitor_%02d." % i + wallpaper.format.lower()
+                filename = secure_filename("Monitor_%02d." % i +
+                                           wallpaper.format.lower())
                 filepath = os.path.join(tempfile.gettempdir(), filename)
                 wallpaper.crop([int(d) for d in dimensions]).save(filepath)
                 download.add(filepath, arcname=os.path.basename(filepath))
