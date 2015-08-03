@@ -26,6 +26,7 @@ User interface for the nuancier flask application.
 import hashlib
 import os
 import random
+import tempfile
 import tarfile
 
 import flask
@@ -577,17 +578,17 @@ def multimonitor_download(election_folder, candidate_file):
         wallpaper = Image.open(os.path.join(APP.config['PICTURE_FOLDER'],
                                election_folder, candidate_file))
         tarfilename = election_folder + "_mutimonitor_download.tar.gz"
-        tarfilepath = os.path.join(APP.config['TEMP_FOLDER'], tarfilename)
-        with tarfile.open(tarfilepath, "w:gz") as download:
+        tarfilepath = os.path.join(tempfile.gettempdir(), tarfilename)
+        with tarfile.open(tarfilepath, 'w:gz') as download:
             i = 1
             for dimensions in overlays:
-                filename = "overlay%02d.jpg" % i
-                filepath = os.path.join(APP.config['TEMP_FOLDER'], filename)
+                filename = "Monitor_%02d." % i + wallpaper.format.lower()
+                filepath = os.path.join(tempfile.gettempdir(), filename)
                 wallpaper.crop([int(d) for d in dimensions]).save(filepath)
                 download.add(filepath, arcname=os.path.basename(filepath))
                 os.remove(filepath)
                 i += 1
-        return flask.send_from_directory(APP.config['TEMP_FOLDER'],
+        return flask.send_from_directory(tempfile.gettempdir(),
                                          tarfilename, as_attachment=True)
     return flask.render_template(
         'multimonitor.html',
