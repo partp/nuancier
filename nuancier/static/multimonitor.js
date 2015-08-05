@@ -33,11 +33,7 @@ $(document).ready(function() {
                 aspectRatio: xAspect / yAspect
             });
             $(dynamic_div)
-            .append('<span class="resize-handle resize-handle-nw"></span>')
-            .append('<span class="resize-handle resize-handle-ne"></span>')
-            .append('<span class="delete"></span>')
-            .append('<span class="resize-handle resize-handle-se"></span>')
-            .append('<span class="resize-handle resize-handle-sw"></span>');
+            .append('<span class="delete"></span>');
             $(dynamic_div).appendTo('#cropArea');
         }
     });
