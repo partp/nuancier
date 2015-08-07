@@ -49,8 +49,9 @@ h1, h2, h3 {
 body#index #mainNav li#indexTab a,
 body#contribute #mainNav li#contributeTab a,
 body#elections #mainNav li#electionsTab a,
-body#submissions #mainNav li#submissionsTab a,
+body#multimonitor #mainNav li#mulimonitorTab a,
 body#results #mainNav li#resultsTab a,
+body#submissions #mainNav li#submissionsTab a,
 body#admin #mainNav li#adminTab a {
     background-color: #fff;
     color: #444;
