@@ -2,6 +2,8 @@
 
 {% block title %} {{ super() }} {% endblock %}
 
+{%block tag %}multimonitor{% endblock %}
+
 {%block head %}
 <link rel="stylesheet" type="text/css"
 href="{{ url_for('static', filename='jquery-ui-1.9.2.custom.css') }}" />
@@ -12,23 +14,16 @@ href="{{ url_for('static', filename='multimonitor.css') }}" />
 {% block content %}
 <div id="croppingWidget">
     <div id="cropControls">
-        Resolution
-        <input type="text" id="xAspect" /> X
-        <input type="text" id="yAspect" />
-        <input type="button" id="addOverlay" value="Add Screen" />
-        <input type="button" id="enlargeOverlay" value="+" />
-        <input type="button" id="shrinkOverlay" value="-" />
-        <input type="button" id="downloadCrop" value="Crop & Download" />
+        Resolution in pixels
+        <input type="text" id="x-aspect" placeholder="Width" /> X
+        <input type="text" id="y-aspect" placeholder="Height" />
+        <input type="button" id="add-overlay" value="Add Monitor">
+        <form id="submit-overlays" action="wallpapers" method="POST">
+            <input type="hidden" id="overlays-json" name="overlays-json"/>
+            <input type="button" id="show-wallpapers" value="Show Wallpapers" />
+        </form>
     </div>
-    <div id="cropArea">
-        <img id="cropImage" src="{{ url_for('base_picture',
-                                            filename='%s/%s' % (
-                                                election_folder,
-                                                candidate_file
-                                                )
-                                            )
-                                            }}" alt="img {{ candidate_file }}" />
-    </div>
+    <div id="multimonitor-config"></div>
 </div>
 {% endblock %}
 
