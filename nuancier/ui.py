@@ -570,29 +570,9 @@ def update_candidate(cand_id):
         form=form)
 
 
-@APP.route('/multimonitor/<election_folder>/<candidate_file>',
-           methods=['GET', 'POST'])
-def multimonitor_download(election_folder, candidate_file):
-    if flask.request.method == 'POST':
-        overlays = flask.request.json['overlays']
-        wallpaper = Image.open(os.path.join(APP.config['PICTURE_FOLDER'],
-                               election_folder, candidate_file))
-        tarfilename = secure_filename(election_folder +
-                                      "_mutimonitor_download.tar.gz")
-        tarfilepath = os.path.join(tempfile.gettempdir(), tarfilename)
-        with tarfile.open(tarfilepath, 'w:gz') as download:
-            i = 1
-            for dimensions in overlays:
-                filename = secure_filename("Monitor_%02d." % i +
-                                           wallpaper.format.lower())
-                filepath = os.path.join(tempfile.gettempdir(), filename)
-                wallpaper.crop([int(d) for d in dimensions]).save(filepath)
-                download.add(filepath, arcname=os.path.basename(filepath))
-                os.remove(filepath)
-                i += 1
-        return flask.send_from_directory(tempfile.gettempdir(),
-                                         tarfilename, as_attachment=True)
+@APP.route('/multimonitor/', methods=['GET', 'POST'])
+def multimonitor_input():
+    ''' Ask user to configure multi-monitor setup. '''
+
     return flask.render_template(
-        'multimonitor.html',
-        election_folder=election_folder,
-        candidate_file=candidate_file)
+        'multimonitor.html')
