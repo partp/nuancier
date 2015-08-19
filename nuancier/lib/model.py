@@ -392,7 +392,15 @@ class Candidates(BASE):
 
         """
         query = session.query(
-            cls
+            Candidates,
+            Candidates.candidate_file,
+            Candidates.candidate_width,
+            Candidates.candidate_height,
+            Candidates.candidate_name,
+            Candidates.candidate_author,
+            Candidates.election_id,
+            Candidates.candidate_license,
+            sa.func.sum(Votes.value).label('votes')
         ).filter(
             Candidates.candidate_width != None
         ).filter(
@@ -408,8 +416,23 @@ class Candidates(BASE):
                 Candidates.approved == approved
             )
 
-        query = query.order_by(sa.desc(Candidates.width * Candidates.height))
-
+        query.group_by(
+            Candidates.id,
+            Candidates.candidate_file,
+            Candidates.candidate_name,
+            Candidates.candidate_author,
+            Candidates.candidate_original_url,
+            Candidates.candidate_license,
+            Candidates.candidate_submitter,
+            Candidates.submitter_email,
+            Candidates.election_id,
+            Candidates.approved,
+            Candidates.approved_motif,
+            Candidates.date_created,
+            Candidates.date_updated
+        ).order_by(
+            'votes DESC'
+        )
         return query.all()
 
     @classmethod
