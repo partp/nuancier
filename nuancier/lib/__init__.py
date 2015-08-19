@@ -98,11 +98,14 @@ def get_candidates(session, election_id, approved=None):
 
 
 def get_candidates_by_minimum_resolution(session, min_width,
-                                         min_height):
+                                         min_height, approved=None):
     """ Return the candidates with resolution lower than specified.
 
     :arg min_width: minimum width of the candidate required.
     :arg min_height: minimum width of the candidate required.
+    :kwarg approved: a boolean specifying wether to filter the candidates
+        for approved or not-approved candidates. If left to default (None),
+        no filtering of the approval is performed.
     """
     return nuancier.lib.model.Candidates.by_minimum_resolution(
             session, min_width, min_height)
