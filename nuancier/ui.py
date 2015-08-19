@@ -589,7 +589,6 @@ def update_candidate(cand_id):
 @APP.route('/multimonitor/', methods=['GET', 'POST'])
 def multimonitor_input():
     ''' Ask user to configure multi-monitor setup. '''
-
     return flask.render_template(
         'multimonitor.html')
 
@@ -612,11 +611,12 @@ def show_multimonitor_wallpapers():
     min_height = max(bottom) - min(top)
     candidates = nuancierlib.get_candidates_by_minimum_resolution(
         SESSION, min_width, min_height, approved=True)
+    elections = nuancierlib.get_elections(SESSION)
+    elections = [election.election_folder for election in elections]
     return flask.render_template(
         'show_multimonitor_wallpapers.html',
         candidates=candidates,
-        picture_folder=os.path.join(
-            APP.config['PICTURE_FOLDER'], election.election_folder),
-        cache_folder=os.path.join(
-            APP.config['CACHE_FOLDER'], election.election_folder),
-        overlays=overlays)
+        elections=elections,
+        picture_folder=APP.config['PICTURE_FOLDER'],
+        cache_folder=APP.config['CACHE_FOLDER'],
+        overlays=flask.request.form['overlays-json'])
