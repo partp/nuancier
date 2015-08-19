@@ -337,7 +337,8 @@ class Candidates(BASE):
         return query.first()
 
     @classmethod
-    def by_minimum_resolution(cls, session, min_width, min_height):
+    def by_minimum_resolution(cls, session, min_width, min_height,
+                              approved=None):
         """ Return the candidate associated to the given election
         identifier. Filter them if they are approved or not for the
         election.
@@ -354,6 +355,11 @@ class Candidates(BASE):
         ).filter(
             Candidates.candidate_height >= min_height
         )
+
+        if approved is not None:
+            query = query.filter(
+                Candidates.approved == approved
+            )
 
         query = query.order_by(sa.desc(Candidates.width * Candidates.height))
 

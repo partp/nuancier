@@ -611,7 +611,7 @@ def show_multimonitor_wallpapers():
     min_width = max(right) - min(left)
     min_height = max(bottom) - min(top)
     candidates = nuancierlib.get_candidates_by_minimum_resolution(
-        SESSION, min_width, min_height)
+        SESSION, min_width, min_height, approved=True)
     return flask.render_template(
         'show_multimonitor_wallpapers.html',
         candidates=candidates,
