@@ -100,6 +100,17 @@ def get_candidates(session, election_id, approved=None):
         session, election_id, approved)
 
 
+def get_candidates_by_minimum_resolution(session, min_width,
+                                         min_height):
+    """ Return the candidates with resolution lower than specified.
+
+    :arg min_width: minimum width of the candidate required.
+    :arg min_height: minimum width of the candidate required.
+    """
+    return nuancier.lib.model.Candidates.by_minimum_resolution(
+            session, min_width, min_height)
+
+
 def get_candidate(session, candidate_id):
     """ Return the candidate with the specified identifier.
 
@@ -279,14 +290,16 @@ def edit_election(session, election, election_name, election_folder,
     return election
 
 
-def add_candidate(session, candidate_file, candidate_name, candidate_author,
-                  candidate_original_url, candidate_license,
-                  candidate_submitter, submitter_email,
+def add_candidate(session, candidate_file, candidate_width, candidate_height,
+                  candidate_name, candidate_author, candidate_original_url,
+                  candidate_license, candidate_submitter, submitter_email,
                   election_id, user=None):
     """ Add a new candidate to the database.
 
     :arg session: session with which to interact with the database
     :arg candidate_file: the file name of candidate
+    :arg candidate_width: the image width of candidate
+    :arg candidate_height: the image height of candidate
     :arg candidate_name: the name of candidate
     :arg candidate_author: the name of the author of this candidate
     :arg candidate_original_url: if the artwork originates from
@@ -320,6 +333,8 @@ def add_candidate(session, candidate_file, candidate_name, candidate_author,
 
     candidate = nuancier.lib.model.Candidates(
         candidate_file=candidate_file,
+        candidate_width=candidate_width,
+        candidate_height=candidate_height,
         candidate_name=candidate_name,
         candidate_author=candidate_author,
         candidate_original_url=candidate_original_url,

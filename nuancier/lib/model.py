@@ -236,6 +236,8 @@ class Candidates(BASE):
     __tablename__ = 'Candidates'
     id = sa.Column(sa.Integer, nullable=False, primary_key=True)
     candidate_file = sa.Column(sa.String(255), nullable=False)
+    candidate_width = sa.Column(sa.Integer, nullable=False)
+    candidate_height = sa.Column(sa.Integer, nullable=False)
     candidate_name = sa.Column(sa.String(255), nullable=False)
     candidate_author = sa.Column(sa.String(255), nullable=False)
     candidate_original_url = sa.Column(sa.String(255), nullable=True)
@@ -333,6 +335,29 @@ class Candidates(BASE):
         )
 
         return query.first()
+
+    @classmethod
+    def by_minimum_resolution(cls, session, min_width, min_height):
+        """ Return the candidate associated to the given election
+        identifier. Filter them if they are approved or not for the
+        election.
+
+        """
+        query = session.query(
+            cls
+        ).filter(
+            Candidates.candidate_width != None
+        ).filter(
+            Candidates.candidate_height != None
+        ).filter(
+            Candidates.candidate_width >= min_width
+        ).filter(
+            Candidates.candidate_height >= min_height
+        )
+
+        query = query.order_by(sa.desc(Candidates.width * Candidates.height))
+
+        return query.all()
 
     @classmethod
     def get_results(cls, session, election_id):
