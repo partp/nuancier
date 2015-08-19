@@ -289,6 +289,7 @@ def validate_input_file(input_file):
         raise nuancierlib.NuancierException(
             'The submitted candidate has a height of %s pixels which is lower'
             ' than the minimum %s pixels required' % (height, min_height))
+    return width, height
 
 
 ## Generic APP functions

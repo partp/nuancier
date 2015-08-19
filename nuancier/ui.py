@@ -26,6 +26,7 @@ User interface for the nuancier flask application.
 import hashlib
 import os
 import random
+import json
 import tempfile
 import tarfile
 
@@ -101,7 +102,7 @@ def contribute(election_id):
         candidate_file = flask.request.files['candidate_file']
 
         try:
-            validate_input_file(candidate_file)
+            width, height = validate_input_file(candidate_file)
         except nuancierlib.NuancierException as err:
             LOG.debug('ERROR: Uploaded file is invalid - user: "%s" '
                       'election: "%s"', flask.g.fas_user.username,
@@ -138,6 +139,8 @@ def contribute(election_id):
             nuancierlib.add_candidate(
                 SESSION,
                 candidate_file=filename,
+                candidate_width=width,
+                candidate_height=height,
                 candidate_name=form.candidate_name.data,
                 candidate_author=form.candidate_author.data,
                 candidate_original_url=form.candidate_original_url.data,
@@ -497,7 +500,7 @@ def update_candidate(cand_id):
         candidate_file = flask.request.files['candidate_file']
 
         try:
-            validate_input_file(candidate_file)
+            width, height = validate_input_file(candidate_file)
         except nuancierlib.NuancierException as err:
             LOG.debug('ERROR: Uploaded file is invalid - user: "%s" '
                       'election: "%s"', flask.g.fas_user.username,
@@ -533,6 +536,8 @@ def update_candidate(cand_id):
         # Update the candidate
         form.populate_obj(obj=candidate)
         candidate.candidate_file = filename
+        candidate.candidate_width = width
+        candidate.candidate_height = height
         candidate.approved = False
         candidate.approved_motif = None
         SESSION.add(candidate)
@@ -576,3 +581,31 @@ def multimonitor_input():
 
     return flask.render_template(
         'multimonitor.html')
+
+
+@APP.route('/multimonitor/wallpapers', methods=['POST'])
+def show_multimonitor_wallpapers():
+    ''' Show users only those wallpaper that can fit their
+    multi-monitor setup. '''
+    overlays = json.loads(flask.request.form['overlays-json'])['overlays']
+    left = []
+    right = []
+    top = []
+    bottom = []
+    for overlay in overlays:
+        left.append(overlay[0])
+        top.append(overlay[1])
+        right.append(overlay[2])
+        bottom.append(overlay[3])
+    min_width = max(right) - min(left)
+    min_height = max(bottom) - min(top)
+    candidates = nuancierlib.get_candidates_by_minimum_resolution(
+        SESSION, min_width, min_height)
+    return flask.render_template(
+        'show_multimonitor_wallpapers.html',
+        candidates=candidates,
+        picture_folder=os.path.join(
+            APP.config['PICTURE_FOLDER'], election.election_folder),
+        cache_folder=os.path.join(
+            APP.config['CACHE_FOLDER'], election.election_folder),
+        overlays=overlays)

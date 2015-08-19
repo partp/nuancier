@@ -249,6 +249,8 @@ class Candidates(BASE):
     __tablename__ = 'Candidates'
     id = sa.Column(sa.Integer, nullable=False, primary_key=True)
     candidate_file = sa.Column(sa.String(255), nullable=False)
+    candidate_width = sa.Column(sa.Integer, nullable=False)
+    candidate_height = sa.Column(sa.Integer, nullable=False)
     candidate_name = sa.Column(sa.String(255), nullable=False)
     candidate_author = sa.Column(sa.String(255), nullable=False)
     candidate_original_url = sa.Column(sa.String(255), nullable=True)
@@ -285,12 +287,15 @@ class Candidates(BASE):
         denied = (not self.approved and self.approved_motif is not None)
         return denied
 
-    def __init__(self, candidate_file, candidate_name, candidate_author,
-                 candidate_license, candidate_submitter, submitter_email,
-                 election_id, candidate_original_url=None, approved=False):
+    def __init__(self, candidate_file, candidate_width, candidate_height,
+                 candidate_name, candidate_author, candidate_license,
+                 candidate_submitter, submitter_email, election_id,
+                 candidate_original_url=None, approved=False):
         """ Constructor
 
         :arg candidate_file: the file name of the candidate
+        :arg candidate_width: the image width of candidate
+        :arg candidate_height: the image height of candidate
         :arg candidate_name: the name of the candidate
         :arg candidate_author: the name of the author of this candidate
         :arg candidate_license: the license name of the candidate
@@ -304,6 +309,8 @@ class Candidates(BASE):
             or not for this election.
         """
         self.candidate_file = candidate_file
+        self.candidate_width = candidate_width
+        self.candidate_height = candidate_height
         self.candidate_name = candidate_name
         self.candidate_author = candidate_author
         self.candidate_original_url = candidate_original_url
@@ -375,6 +382,29 @@ class Candidates(BASE):
         )
 
         return query.first()
+
+    @classmethod
+    def by_minimum_resolution(cls, session, min_width, min_height):
+        """ Return the candidate associated to the given election
+        identifier. Filter them if they are approved or not for the
+        election.
+
+        """
+        query = session.query(
+            cls
+        ).filter(
+            Candidates.candidate_width != None
+        ).filter(
+            Candidates.candidate_height != None
+        ).filter(
+            Candidates.candidate_width >= min_width
+        ).filter(
+            Candidates.candidate_height >= min_height
+        )
+
+        query = query.order_by(sa.desc(Candidates.width * Candidates.height))
+
+        return query.all()
 
     @classmethod
     def get_results(cls, session, election_id):
