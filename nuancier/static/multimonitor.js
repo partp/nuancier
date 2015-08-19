@@ -1,3 +1,9 @@
+var passOverlays = function(action) {
+    $('#pass-overlays').attr("action", action);
+    $('#pass-overlays').submit();
+};
+
+
 $(document).ready(function() {
     $('#add-overlay').click(function() {
         var xAspect = $('#x-aspect').val(),
@@ -7,7 +13,7 @@ $(document).ready(function() {
                 width: xAspect,
                 height: yAspect
             });
-            $(dynamic_div).addClass('overlays').draggable({
+            $(dynamic_div).addClass('overlay').draggable({
                 containment: '#multimonitor-config',
                 snap: true,
                 snapMode: "outer"
@@ -17,13 +23,15 @@ $(document).ready(function() {
             $(dynamic_div).appendTo('#multimonitor-config');
         }
     });
+
     $('#multimonitor-config').on('click','.delete',function () {
         $(this).parent().remove();
         return false;
     });
+
     $('#show-wallpapers').click(function() {
         var data = {overlays: []},
-            $overlays = $('.overlays'),
+            $overlays = $('.overlay'),
             $multimonitorConfig = $('#multimonitor-config'),
             left, top, width, height;
         for(var i = 0; i < $overlays.length; i++) {
@@ -31,7 +39,7 @@ $(document).ready(function() {
             top =  $overlays.eq(i).offset().top - $multimonitorConfig.offset().top;
             width = $overlays.eq(i).width();
             height = $overlays.eq(i).height();
-            data.overlays.push([left, top, left + width, top + height]);
+            data.overlays.push([left, top, width, height]);
         }
         $('#overlays-json').val(JSON.stringify(data));
         $('#submit-overlays').submit();

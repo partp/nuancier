@@ -1,4 +1,4 @@
-#cropControls {
+#crop-controls {
     padding: 0px 10px 10px 10px;
 }
 
@@ -10,12 +10,12 @@
     width: 800px;
 }
 
-#cropControls form {
+#crop-controls form {
     display: inline;
     float: right;
 }
 
-.overlays {
+.overlay {
     position: absolute;
     outline: 2px dashed #0066CC;
     cursor: move;
@@ -41,7 +41,7 @@
     content: "×";
 }
 
-#cropImage {
+#crop-image {
     position: relative;
     float: left;
     max-width: 100%;
