@@ -620,3 +620,36 @@ def show_multimonitor_wallpapers():
         picture_folder=APP.config['PICTURE_FOLDER'],
         cache_folder=APP.config['CACHE_FOLDER'],
         overlays=flask.request.form['overlays-json'])
+
+
+@APP.route('/multimonitor/<election_folder>/<candidate_file>/',
+           methods=['POST'])
+def adjust_wallpaper(election_folder, candidate_file):
+    return flask.render_template(
+        'adjust_wallpaper.html',
+        election_folder=election_folder,
+        candidate_file=candidate_file,
+        overlays=flask.request.form['overlays-json'])
+
+
+@APP.route('/multimonitor/<election_folder>/<candidate_file>/download/',
+           methods=['POST'])
+def multimonitor_download(election_folder, candidate_file):
+    overlays = flask.request.json['overlays']
+    wallpaper = Image.open(os.path.join(APP.config['PICTURE_FOLDER'],
+                           election_folder, candidate_file))
+    tarfilename = secure_filename(election_folder +
+                                  "_mutimonitor_download.tar.gz")
+    tarfilepath = os.path.join(tempfile.gettempdir(), tarfilename)
+    with tarfile.open(tarfilepath, 'w:gz') as download:
+        i = 1
+        for dimensions in overlays:
+            filename = secure_filename("Monitor_%02d." % i +
+                                       wallpaper.format.lower())
+            filepath = os.path.join(tempfile.gettempdir(), filename)
+            wallpaper.crop([int(d) for d in dimensions]).save(filepath)
+            download.add(filepath, arcname=os.path.basename(filepath))
+            os.remove(filepath)
+            i += 1
+    return flask.send_from_directory(tempfile.gettempdir(),
+                                     tarfilename, as_attachment=True)

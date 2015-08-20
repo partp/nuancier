@@ -48,3 +48,8 @@
     height: auto;
     width: auto\9;
 }
+
+#download-crop {
+    position: relative;
+    float: right;
+}

@@ -1,0 +1,41 @@
+{% extends "master.html" %}
+
+{% block title %} {{ super() }} {% endblock %}
+
+{%block tag %}multimonitor{% endblock %}
+
+{%block head %}
+<link rel="stylesheet" type="text/css"
+href="{{ url_for('static', filename='jquery-ui-1.9.2.custom.css') }}" />
+<link rel="stylesheet" type="text/css"
+href="{{ url_for('static', filename='multimonitor.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div id="cropping-widget">
+    <div id="crop-controls">
+        <input type="button" id="enlarge-overlay" value="+" />
+        <input type="button" id="shrink-overlay" value="-" />
+        <input type="button" id="download-crop" value="Crop &amp; Download" />
+    </div>
+    <div id="crop-area">
+        <img id="crop-image" src="{{ url_for('base_picture',
+                                            filename='%s/%s' % (
+                                                election_folder,
+                                                candidate_file
+                                                )
+                                            )
+                                            }}" alt="img {{ candidate_file }}" />
+    </div>
+</div>
+{% endblock %}
+
+{% block jscripts %}
+{% autoescape false %}
+<script>var overlays = JSON.parse('{{ overlays }}').overlays;</script>
+{% endautoescape %}
+<script src="{{ url_for('static', filename='jquery-1.10.2.min.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery-ui-1.9.2.custom.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jquery.event.drag-2.2.js') }}"> </script>
+<script type="text/javascript" src="{{ url_for('static', filename='adjust_wallpaper.js') }}"> </script>
+{% endblock %}
