@@ -30,18 +30,21 @@ $(document).ready(function() {
     });
 
     $('#show-wallpapers').click(function() {
-        var data = {overlays: []},
-            $overlays = $('.overlay'),
-            $multimonitorConfig = $('#multimonitor-config'),
-            left, top, width, height;
-        for(var i = 0; i < $overlays.length; i++) {
-            left = $overlays.eq(i).offset().left - $multimonitorConfig.offset().left;
-            top =  $overlays.eq(i).offset().top - $multimonitorConfig.offset().top;
-            width = $overlays.eq(i).width();
-            height = $overlays.eq(i).height();
-            data.overlays.push([left, top, width, height]);
+        var $overlays = $('.overlay'),
+            overlaysLength = $overlays.length;
+        if(overlaysLength > 1) {
+            var data = {overlays: []},
+                $multimonitorConfig = $('#multimonitor-config'),
+                left, top, width, height;
+            for(var i = 0; i < overlaysLength; i++) {
+                left = ($overlays.eq(i).offset().left - $multimonitorConfig.offset().left) / imageScale;
+                top =  ($overlays.eq(i).offset().top - $multimonitorConfig.offset().top) / imageScale;
+                width = $overlays.eq(i).width() / imageScale;
+                height = $overlays.eq(i).height() / imageScale;
+                data.overlays.push([left, top, width, height]);
+            }
+            $('#overlays-json').val(JSON.stringify(data));
+            $('#submit-overlays').submit();
         }
-        $('#overlays-json').val(JSON.stringify(data));
-        $('#submit-overlays').submit();
     });
 });
