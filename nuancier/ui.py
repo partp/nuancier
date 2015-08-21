@@ -605,8 +605,8 @@ def show_multimonitor_wallpapers():
     for overlay in overlays:
         left.append(overlay[0])
         top.append(overlay[1])
-        right.append(overlay[2])
-        bottom.append(overlay[3])
+        right.append(overlay[2] + overlay[0])
+        bottom.append(overlay[3] + overlay[1])
     min_width = max(right) - min(left)
     min_height = max(bottom) - min(top)
     candidates = nuancierlib.get_candidates_by_minimum_resolution(
