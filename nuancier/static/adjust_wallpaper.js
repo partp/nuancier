@@ -1,4 +1,5 @@
 var $cropImage = $('#crop-image'),
+    $cropArea = $('#crop-area'),
     cropImageWidth = $cropImage.width(),
     cropImageHeight = $cropImage.height(),
     wallpaperWidth,
@@ -6,29 +7,32 @@ var $cropImage = $('#crop-image'),
     imageScale;
 
 $(document).ready(function() {
-    $("<img/>").attr("src", $cropImage.attr("src")).load(function() {
+    $('<img/>').attr('src', $cropImage.attr('src')).load(function() {
         wallpaperWidth = this.width;
         wallpaperHeight = this.height;
         imageScale = cropImageWidth * 1.0 / wallpaperWidth;
-    });
+        for (i = 0; i < overlays.length; i++) {
+            var dynamic_div = $(document.createElement('div')).css({
+                left: $cropImage.offset().left + overlays[i][0] * imageScale,
+                top: $cropImage.offset().top + overlays[i][1] * imageScale,
+                width: overlays[i][2] * imageScale,
+                height: overlays[i][3] * imageScale
+            });
+            $(dynamic_div).addClass('overlay');
+            $(dynamic_div).appendTo('#crop-area');
+        }
 
-    for (i = 0; i < overlays.length; i++) {
-        var dynamic_div = $(document.createElement('div')).css({
-            left: ($cropImage.offset().left + overlays[i][0]),
-            top: ($cropImage.offset().top + overlays[i][1]),
-            width: (overlays[i][2]),
-            height: (overlays[i][3])
-        });
-        $(dynamic_div).addClass('overlay');
-        $(dynamic_div).appendTo('#crop-area');
-    }
-
-    $('.overlay').drag("init", function() {
-        return $('.overlay');
-    }).drag(function(handler, options) {
-        $(this).css({
-            top: options.offsetY,
-            left: options.offsetX
+        $('.overlay').drag('init', function() {
+            return $('.overlay');
+        }).drag('start', function(handler, options){
+            options.limit = $cropArea.offset();
+            options.limit.bottom = options.limit.top + $cropImage.outerHeight() - $(this).outerHeight();
+            options.limit.right = options.limit.left + $cropImage.outerWidth() - $(this).outerWidth();
+        }).drag(function(handler, options) {
+            $(this).css({
+                top: Math.min(options.limit.bottom, Math.max(options.limit.top, options.offsetY)),
+                left: Math.min(options.limit.right, Math.max(options.limit.left, options.offsetX))
+            });
         });
     });
 

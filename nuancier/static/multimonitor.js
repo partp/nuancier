@@ -1,4 +1,5 @@
-var passOverlays = function(action) {
+var imageScale = 0.1,
+    passOverlays = function(action) {
     $('#pass-overlays').attr("action", action);
     $('#pass-overlays').submit();
 };
@@ -9,6 +10,8 @@ $(document).ready(function() {
         var xAspect = $('#x-aspect').val(),
             yAspect = $('#y-aspect').val();
         if(Number(xAspect) > 0 && Number(yAspect) > 0) {
+            xAspect *=  imageScale;
+            yAspect *=  imageScale;
             var dynamic_div = $(document.createElement('div')).css({
                 width: xAspect,
                 height: yAspect
