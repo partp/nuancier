@@ -12,7 +12,7 @@ href="{{ url_for('static', filename='multimonitor.css') }}" />
 {% endblock %}
 
 {% block content %}
-{% if candidates %}
+{% if candidates and candidates[0].election_id %}
 {% autoescape false %}
 <form id="pass-overlays" method="POST">
     <input type="hidden" id="overlays-json" name="overlays-json" value='{{ overlays }}'/>
